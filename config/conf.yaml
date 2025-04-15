@@ -1,0 +1,28 @@
+defaults:
+  # override the terminal font size when in windows or when using sixel.
+  terminal_font_size: 18
+
+  # the theme to use by default in every presentation unless overridden.
+  # theme: catppuccin-frappe
+  theme: dark
+  # theme: catppuccin-latte
+
+snippet:
+  exec:
+    # enable code snippet execution. Use at your own risk!
+    enable: true
+    custom:
+      ts:
+        filename: snippet.ts
+        commands:
+        - ["node","--no-warnings", "$pwd/snippet.ts"]
+        hidden_line_prefix: "/// "
+
+mermaid:
+  # the scale parameter passed to the mermaid CLI (mmdc).
+  scale: 1
+
+export:
+    dimensions:
+        columns: 95
+        rows: 25
