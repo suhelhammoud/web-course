@@ -1,14 +1,14 @@
 ---
-title: Object Oriented Programming in Java
-sub_title: Records
+title: Web Applications
+sub_title: Node.js
 author: Suhel Hammoud
 
 theme:
   override:
     code:
       alignment: left
-      # margin:
-      #     percent: 2q
+      margin:
+        percent: 3
       #   padding:
       # horizontal: 4
 ---

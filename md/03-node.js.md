@@ -238,8 +238,8 @@ Introduction to npm
 
 # History and Scope
 
-- npm started as a tool to manage Node.js dependencies,  
-- but is now also widely used in frontend JavaScript development.
+- npm started as a tool to manage Node.js dependencies. 
+- It is now also widely used in frontend JavaScript development.
 - Alternatives include **Yarn** and **pnpm**.
 
 <!-- end_slide -->
@@ -284,7 +284,6 @@ npm install <package-name>
 ```
 
 - Since **npm v5**, this also adds the package to `package.json`.
-
 - Before v5, you had to use `--save`.
 
 <!-- end_slide -->
@@ -328,9 +327,15 @@ Useful when a feature is non-critical or platform-specific.
 
 <!-- end_slide -->
 
-npm:Updating Packages
+npm:Uninstalling & Updating Packages
 ===
 
+<!-- pause -->
+# Uninstall a specific package:
+
+```bash
+npm uninstall <package-name>
+```
 <!-- pause -->
 # Update all packages:
 
@@ -424,3 +429,4 @@ npm run prod
 References:
 ===
 - https://nodejs.org/en/learn/getting-started/introduction-to-nodejs
+- https://github.com/suhelhammoud/web-course
