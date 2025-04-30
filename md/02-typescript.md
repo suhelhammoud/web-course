@@ -41,6 +41,8 @@ let helloWorld = "Hello World"; // TypeScript infers `helloWorld` as `string`.
 
 When TypeScript can't infer types, you can define them explicitly.
 
+<!-- column_layout: [1, 1] -->
+<!-- column: 0 -->
 ### Example: Inferred Object
 
 ```typescript
@@ -49,7 +51,7 @@ const user = {
   id: 0,
 };
 ```
-
+<!-- column: 1 -->
 ### Example: Explicit Interface
 
 ```typescript
@@ -63,6 +65,7 @@ const user: User = {
   id: 0,
 };
 ```
+<!-- reset_layout -->
 
 <!-- end_slide -->
 
@@ -196,7 +199,7 @@ TypeScript checks the **shape** of objects, not their explicit type.
 
 ### Example: Structural Typing
 
-```typescript +exec
+```typescript
 interface Point {
   x: number;
   y: number;
@@ -207,7 +210,8 @@ function logPoint(p: Point) {
 }
  
 const point = { x: 12, y: 26 };
-logPoint(point); // Works even if `point` isn’t explicitly a `Point`.
+// Works even if `point` isn’t explicitly a `Point`.
+logPoint(point); //12 26  
 ```
 
 <!-- end_slide -->
@@ -216,10 +220,10 @@ logPoint(point); // Works even if `point` isn’t explicitly a `Point`.
 
 Only required properties need to match:
 
-```typescript  +exec
-/// function logPoint(p: Point) {
-///   console.log(`${p.x}, ${p.y}`);
-/// }
+```typescript
+function logPoint(p: Point) {
+  console.log(`${p.x}, ${p.y}`);
+}
  
 const point3 = { x: 12, y: 26, z: 89 };
 logPoint(point3); // Works: `x` and `y` match.
@@ -234,12 +238,7 @@ logPoint(color); // Error: Missing `x` and `y`.
 
 Classes also conform to shapes:
 
-```typescript  +exec
-
-/// function logPoint(p: Point) {
-///   console.log(`${p.x}, ${p.y}`);
-/// }
-
+```typescript
 class VirtualPoint {
   constructor( x: number,  y: number) {
     this.x = x;
@@ -267,4 +266,3 @@ References:
 ===
 
 - https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html
-- 

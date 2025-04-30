@@ -1,6 +1,6 @@
 ---
 title: Web Applications
-sub_title: Node.js
+sub_title: Events
 author: Suhel Hammoud
 
 theme:
@@ -13,11 +13,4 @@ theme:
       # horizontal: 4
 ---
 
-primitive-types
-===
 
-<!-- column_layout: [1, 1] -->
-<!-- column: 0 -->
-<!-- new_line -->
-<!-- reset_layout -->
-<!-- end_slide -->

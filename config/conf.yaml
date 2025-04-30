@@ -17,12 +17,14 @@ snippet:
         commands:
         - ["node","--no-warnings", "$pwd/snippet.ts"]
         hidden_line_prefix: "/// "
+  render:
+    threads: 3
 
 mermaid:
   # the scale parameter passed to the mermaid CLI (mmdc).
-  scale: 1
+  scale: 2
 
-export:
-    dimensions:
-        columns: 95
-        rows: 25
+#export:
+#    dimensions:
+#        columns: 95
+#        rows: 25
