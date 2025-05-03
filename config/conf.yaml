@@ -4,8 +4,8 @@ defaults:
 
   # the theme to use by default in every presentation unless overridden.
   # theme: catppuccin-frappe
-  theme: dark
-  # theme: catppuccin-latte
+  # theme: dark
+  theme: catppuccin-latte
 
 snippet:
   exec:
