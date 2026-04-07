@@ -178,15 +178,7 @@ $ git checkout -b experimental
 ```
 
 
-```mermaid +render
-gitGraph
-   commit id: "Initial"
-   branch experimental
-   checkout experimental
-   commit id: "Experimental change"
-   checkout main
-   commit id: "Mainline update"
-```
+
 
 <!-- end_slide -->
 
@@ -201,16 +193,7 @@ $ git merge experimental
 ```
 
 
-```mermaid +render +width:50%
-gitGraph
-   commit id: "Base"
-   branch experimental
-   checkout experimental
-   commit id: "Exp Change"
-   checkout main
-   commit id: "Main Change"
-   merge experimental
-```
+
 
 
 <!-- end_slide -->
@@ -269,15 +252,7 @@ bob$ git push origin main
 alice$ git pull 'url_to_bob_repo' main
 ```
 
-```mermaid +render +width:80%
-gitGraph
-   commit id: "Alice initial"
-   branch bob
-   checkout bob
-   commit id: "Bob's changes"
-   checkout main
-   merge bob
-```
+
 <!-- reset_layout -->
 
 <!-- end_slide -->
@@ -397,7 +372,7 @@ $ git diff v2.5:Makefile HEAD:Makefile.in
 $ git show v2.5:Makefile
 ```
 
-- Compare different versions of individual files.
+- Compare differen  t versions of individual files.
 
 <!-- end_slide -->
 
