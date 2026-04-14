@@ -76,7 +76,16 @@ $ git diff --cached
 ```
 Without --cached, git diff will show you any changes that you’ve made but not yet added to the index. 
 
+```
+Working Directory    →    Staging Area    →    HEAD (last commit)
+     (untracked)           (staged)              (committed)
+         │                      │                      │
+         └── git diff ──────────┘                      │
+                                └── git diff --cached ─┘
+```
+
 <!-- end_slide -->
+
 # Status
 You can also get a brief summary of the situation with git status:
 
@@ -357,10 +366,11 @@ src/hello.c: printf("hello world!\n");
 # Visualizing Git History
 
 ```bash
-$ gitk
+$ gitg
 ```
 
 - Shows a full visual graph of branches, commits, merges.
+- Other visual tools are integreted in IDEs
 
 # Comparing Specific Files
 
