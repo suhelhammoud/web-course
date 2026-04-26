@@ -225,6 +225,4 @@ HTTP is the foundation of modern **web APIs**.
 
 # References:
 
-* [MDN Web Docs: HTTP Overview](https://developer.mozilla.org/en-US/docs/Web/HTTP/Overview)
-* [HTTP Status Codes](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status)
-* [HTTP Methods](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods)
+* [](https://developer.mozilla.org/en-US/docs/Web/HTTP/)
