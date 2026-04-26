@@ -104,192 +104,217 @@ const user: User = {
 
 <!-- end_slide -->
 
-## TypeScript Warnings
 
-* Helps catch mistakes early
-* Prevents runtime bugs
+
+# TypeScript Types Overview
+
+TypeScript provides a rich type system for safer and more expressive code.
+
+* Types describe the shape of data
+* Enable better tooling and error checking
+* Useful for large-scale applications
+
+<!-- end_slide -->
+
+# Type Aliases
+
+Type aliases give names to types:
+
+```typescript
+type UserID = string;
+type Point = { x: number; y: number };
+```
+
+* Improves readability
+* Reusable across code
+
+<!-- end_slide -->
+
+## Type vs Interface
+
+Both describe shapes, but differ:
+
+* `interface` → best for object shapes
+* `type` → more flexible
 
 ```typescript
 interface User {
   name: string;
-  id: number;
 }
 
-const user: User = {
-  username: "Hayes", // Error
-  id: 0,
-};
+type Admin = User & { role: string };
 ```
 
+* Types support unions, intersections, and more
+
 <!-- end_slide -->
 
-## Narrowing
+## Object Literal Types
 
-<!-- incremental_lists: true -->
-TypeScript can refine types based on conditions.
-
-* Uses `typeof`, `instanceof`, and checks
-* `typeof` for checking primitive types
-* `instanceof` for checking arrays and class types
-* Makes unions safe to use
+Define object structures inline:
 
 ```typescript
-function printId(id: number | string) {
-  if (typeof id === "string") {
-    console.log(id.toUpperCase());
-  } else {
-    console.log(id);
-  }
-}
-```
-<!-- end_slide -->
-
-## More on Functions
-
-* Parameters and return types can be typed
-* Functions are first-class citizens
-
-```typescript
-function deleteUser(user: User) {}
-
-function getAdminUser(): User {
-  return { name: "Admin", id: 1 };
-}
-```
-
-* Helps enforce contracts between components
-
-<!-- end_slide -->
-
-## Object Types
-
-* Define structure of objects
-* Can be inline or reusable
-
-```typescript
-function printUser(user: { name: string; age: number }) {
-  console.log(user.name);
-}
-```
-
-* Useful for APIs and data models
-
-<!-- end_slide -->
-
-## Primitive Types
-
-<!-- incremental_lists: true -->
-Additional types:
-
-* `any`: disables type checking
-
-* `unknown`: safer alternative to `any`
-
-* `never`: represents unreachable values
-
-* `void`: no return value
-
-* Prefer strict typing over `any`
-
-<!-- end_slide -->
-
-
-## Optional properties
-
-```typescript
-type User = {
+type Product = {
   name: string;
-  age?: number; // optional
+  price: number;
+  inStock?: boolean;
 };
 ```
-👉 age? means: it can exist (number) or be missing (undefined)
+
+* Optional fields with `?`
+* Strong structure enforcement
 
 <!-- end_slide -->
 
-## Accessing optional properties
+## Function Types
 
-### Handle Undefined:
-
-```typescript
-function printAge(user: User) {
-  if (user.age !== undefined) {
-    console.log(user.age.toFixed(0));
-  }
-}
-```
-<!-- end_slide -->
-
-## Accessing optional properties II
-
-### Use Optional Chaining:
+Describe callable structures:
 
 ```typescript
-user.age?.toFixed(0);
+type Callback = (value: string) => void;
 ```
 
-### Optional + destructuring
-
-```typescript
-function show({ age }: User) {
-  console.log(age ?? "No age");
-}
-```
-<!-- end_slide -->
-
-## Composing Types
-
-### Unions
-
-```typescript
-type MyBool = true | false;
-type WindowStates = "open" | "closed" | "minimized";
-```
-
-* Combine multiple possible values
-
-### Example
-
-```typescript
-function getLength(obj: string | string[]) {
-  return obj.length;
-}
-```
+* Can define parameters and return types
 
 <!-- end_slide -->
 
-## Type Guards with `typeof`
+## Union Types
+
+A value can be one of many types:
 
 ```typescript
-function wrapInArray(obj: string | string[]) {
-  if (typeof obj === "string") {
-    return [obj];
-  }
-  return obj;
-}
+type Size = "small" | "medium" | "large";
 ```
 
-* Enables safe operations on unions
+* Useful for fixed sets of values
 
 <!-- end_slide -->
 
-## Type Manipulation
+## Intersection Types
+
+Combine multiple types:
+
+```typescript
+type A = { x: number };
+type B = { y: number };
+
+type C = A & B; // { x: number, y: number }
+```
+
+* Merges properties
+
+<!-- end_slide -->
+
+## Tuple Types
+
+Fixed-length arrays with known types:
+
+```typescript
+type Data = [number, string];
+```
+
+* Each position has a specific type
+
+<!-- end_slide -->
+
+## Type from Value
+
+Extract types from existing values:
+
+```typescript
+const data = { name: "Alice" };
+
+type Data = typeof data;
+```
+
+* Keeps types in sync with values
+
+<!-- end_slide -->
+
+
+## Indexed Access Types
+
+Access part of a type:
+
+```typescript
+type Response = { data: string };
+
+type Data = Response["data"];
+```
+
+* Extracts nested types
+
+<!-- end_slide -->
+
+## Conditional Types
+
+Types with logic:
+
+```typescript
+type IsString<T> = T extends string ? true : false;
+```
+
+* Works like `if` in type system
+
+<!-- end_slide -->
+
+## Template Literal Types
+
+Build types using strings:
+
+```typescript
+type Lang = "en" | "pt";
+type Section = "header" | "footer";
+
+type IDs = `${Lang}_${Section}_id`;
+```
+
+* Combines string unions
+
+<!-- end_slide -->
+
+## Mapped Types
+
+Transform existing types:
+
+```typescript
+type Subscriber<T> = {
+  [K in keyof T]: (value: T[K]) => void;
+};
+```
+
+* Iterates over properties
+* Creates new structures
+
+<!-- end_slide -->
+
+## Utility Types
 
 <!-- incremental_lists: true -->
 
-* Create new types from existing ones
-* Use utility types
-* Helps reduce duplication and keep types consistent across your codebase
-* Makes it easier to build flexible and reusable type definitions
-* Avoid duplication
-* Improve maintainability
+- Create new types from existing ones
+
+- Built-in helpers:
+
+  * `Partial<T>`
+
+  * `Readonly<T>`
+
+  * `Pick<T, K>`
+
+  * `ReturnType<T>`
+
+- Simplify common patterns
+- Avoid duplication
+- Improve maintainability
 
 <!-- end_slide -->
 
-## Creating Types from Types
+
 
 <!-- pause -->
 
-### Partial Type
+## Partial Type
 ```typescript
 type User = { name: string; age: number;};
 type PartialUser = Partial<User>;
@@ -298,58 +323,31 @@ type PartialUser = Partial<User>;
 Constructs a type with all properties of 'User' to optional
 
 <!-- pause -->
-### Readonly Type
+## Readonly Type
 
 ```typescript
 type Point = { x: number; y: number };
 type ReadonlyPoint = Readonly<Point>;
 ```
 <!-- pause -->
-Constructs a type with all properties of 'User' set to readonly
-
-
+Constructs a type with all properties of 'Point' set to readonly
 
 <!-- end_slide -->
 
-## Generics
-
-* Reusable, flexible types
-
-```typescript
-function identity<T>(arg: T): T {
-  return arg;
-}
-```
-
-* Works with any type
-
-<!-- end_slide -->
-
-## Generics Example
-
-```typescript
-interface Backpack<T> {
-  add: (obj: T) => void;
-  get: () => T;
-}
-
-declare const backpack: Backpack<string>;
-const object = backpack.get();
-backpack.add(23); // Error
-```
-
-<!-- end_slide -->
 
 ## Keyof Type Operator
+<!-- pause -->
 
 ```typescript
 type User = { name: string; id: number };
 type Keys = keyof User;
 ```
+<!-- pause -->
 
 * Produces union of keys
 
-<!-- end_slide -->
+<!-- pause -->
+
 
 ## Typeof Type Operator
 
@@ -357,78 +355,287 @@ type Keys = keyof User;
 const user = { name: "Alice" };
 type UserType = typeof user;
 ```
+<!-- pause -->
 
 * Extracts type from value
 
 <!-- end_slide -->
 
-## Indexed Access Types
-
-```typescript
-type User = { name: string; age: number };
-type Age = User["age"];
-```
-
-* Access property types directly
-
-<!-- end_slide -->
-
-## Conditional Types
-
-```typescript
-type IsString<T> = T extends string ? true : false;
-```
-
-* Enables logic in types
-
-<!-- end_slide -->
-
-## Mapped Types
-
-```typescript
-type OptionsFlags<Type> = {
-  [Property in keyof Type]: boolean;
-};
-```
-
-* Transform all properties of a type
-
-<!-- end_slide -->
-
-## Template Literal Types
-
-```typescript
-type Greeting = `Hello ${string}`;
-```
-Valid Example:
-
-```typescript
-const g1: Greeting = "Hello Alice";
-const g2: Greeting = "Hello world";
-const g3: Greeting = "Hello 123";
-```
-* Build dynamic string types
-
-<!-- end_slide -->
-
-## Classes and Interfaces
+## Pick from type
+Syntax: `Pick<OriginalType, 'key1' | 'key2'>`
 
 ```typescript
 interface User {
-  name: string;
   id: number;
+  name: string;
+  email: string;
+  password: string;
 }
 
-class UserAccount {
-  constructor(public name: string, public id: number) {}
+// Pick only public fields, exclude password one
+type PublicUser = Pick<User, 'id' | 'name' | 'email'>;
+```
+<!-- end_slide -->
+
+
+## Return Type Extraction
+
+Get function return types:
+
+```typescript
+function createUser() {
+  return { name: "Alice" };
 }
 
-const user: User = new UserAccount("Murphy", 1);
+type User = ReturnType<typeof createUser>;
 ```
 
-* Supports OOP patterns
+
+
 
 <!-- end_slide -->
+
+# TypeScript Classes Overview
+
+<!-- incremental_lists: true -->
+TypeScript builds on JavaScript classes with additional type features.
+
+* Adds type safety to class members
+* Includes compile-time checks
+* Keeps JavaScript runtime behavior
+
+<!-- end_slide -->
+
+# Defining a Class
+
+Basic class syntax:
+
+```typescript
+class User {
+  name: string;
+  id: number;
+
+  constructor(id: number, name: string) {
+    this.id = id;
+    this.name = name;
+  }
+}
+```
+
+* Constructor initializes fields
+* Types are enforced during development
+
+<!-- end_slide -->
+
+## Creating Instances
+
+Create objects using `new`:
+
+```typescript
+const user = new User(1, "Alice");
+```
+
+* `new` calls the constructor
+* Returns an instance of the class
+
+<!-- end_slide -->
+
+## Access Modifiers
+
+Control visibility of properties:
+
+* `public` (default)
+* `private`
+* `protected`
+
+```typescript
+class Account {
+  private balance: number;
+
+  constructor(balance: number) {
+    this.balance = balance;
+  }
+}
+```
+
+* `private` is only checked at compile time
+
+<!-- end_slide -->
+
+## private vs #private
+
+Two types of privacy:
+
+```typescript
+class Example {
+  private x = 1;   // Type-only
+  #y = 2;          // Runtime private
+}
+```
+
+* `private` → TypeScript only
+* `#private` → Enforced in JavaScript runtime
+
+<!-- end_slide -->
+
+## Methods and this
+
+The value of `this` depends on how a function is called.
+
+```typescript
+class Counter {
+  count = 0;
+
+  increment() {
+    this.count++;
+  }
+}
+```
+
+* Use arrow functions or `bind` to fix `this`
+```typescript
+  increment = () => this.count++;
+```
+
+<!-- end_slide -->
+
+## Getters and Setters
+
+Control access to properties:
+
+```typescript
+class User {
+  private _name: string = "";
+
+  get name() {
+    return this._name;
+  }
+
+  set name(value: string) {
+    this._name = value;
+  }
+}
+```
+
+* Encapsulates logic
+* Provides controlled access
+
+<!-- end_slide -->
+
+## Static Members
+
+Belong to the class, not instances:
+
+```typescript
+class Config {
+  static version = "1.0";
+
+  static getVersion() {
+    return Config.version;
+  }
+}
+```
+
+* Access using class name
+* Shared across all instances
+
+<!-- end_slide -->
+
+## Parameter Properties
+
+Shortcut for defining and initializing fields:
+
+```typescript
+class Point {
+  constructor(public x: number, public y: number) {}
+}
+```
+
+* Automatically creates and assigns properties
+
+<!-- end_slide -->
+
+## Inheritance
+
+Extend classes using `extends`:
+
+```typescript
+class Animal {
+  speak() {
+    console.log("Some sound");
+  }
+}
+
+class Dog extends Animal {
+  speak() {
+    console.log("Bark");
+  }
+}
+```
+
+* Enables code reuse
+* Supports method overriding
+
+<!-- end_slide -->
+
+## Implements
+
+Ensure a class follows a structure:
+
+```typescript
+interface Serializable {
+  serialize(): string;
+}
+
+class User implements Serializable {
+  serialize() {
+    return "user";
+  }
+}
+```
+
+* Enforces contracts
+
+<!-- end_slide -->
+
+## Abstract Classes
+
+Cannot be instantiated directly:
+
+```typescript
+abstract class Animal {
+  abstract getName(): string;
+
+  printName() {
+    console.log("Hello " + this.getName());
+  }
+}
+```
+
+* Used as base classes
+* Can include abstract methods
+
+<!-- end_slide -->
+
+## Generics in Classes
+
+Reusable type-safe classes:
+
+```typescript
+class Box<T> {
+  contents: T;
+
+  constructor(value: T) {
+    this.contents = value;
+  }
+}
+```
+
+* Works with different types
+* Improves flexibility
+
+<!-- end_slide -->
+
 
 ## Structural Type System
 
@@ -466,6 +673,8 @@ logPoint(color); // Error
 
 ```typescript
 class VirtualPoint {
+  x:number; y: number;
+  
   constructor(x: number, y: number) {
     this.x = x;
     this.y = y;
@@ -475,32 +684,25 @@ class VirtualPoint {
 const newVPoint = new VirtualPoint(13, 56);
 logPoint(newVPoint);
 ```
-
 <!-- end_slide -->
 
-## Modules
+## Decorators
 
-* Split code into files
-* Use `export` and `import`
+Add metadata to classes and members:
 
 ```typescript
-export function add(a: number, b: number) {
-  return a + b;
+@sealed
+class User {
+  name: string;
 }
 ```
+<!-- incremental_lists: true -->
+
+* Used for frameworks and advanced patterns.
+* Common Use Cases: Logging, Validation, Caching, Serialization, etc.
+* Require "experimentalDecorators": true in tsconfig.json.
 
 <!-- end_slide -->
 
-## Conclusion
-
-TypeScript provides:
-
-* Strong typing
-* Better tooling
-* Scalable architecture
-
-<!-- end_slide -->
-
-# References:
-
-* [https://www.typescriptlang.org/docs/](https://www.typescriptlang.org/docs/)
+## References
+* [](https://www.typescriptlang.org/docs/handbook)
