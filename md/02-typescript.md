@@ -72,12 +72,13 @@ let helloWorld = "Hello World";
 
 When inference is not enough, define types explicitly.
 
-* Improves readability
-* Documents intent
 
 <!-- column_layout: [1, 1] -->
 
 <!-- column: 0 -->
+
+* Improves readability
+* Documents intent
 
 ```typescript
 const user = {
@@ -134,8 +135,8 @@ type Point = { x: number; y: number };
 
 Both describe shapes, but differ:
 
-* `interface` → best for object shapes
-* `type` → more flexible
+* `interface` : best for object shapes
+* `type` : more flexible
 
 ```typescript
 interface User {

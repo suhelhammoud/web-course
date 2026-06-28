@@ -15,82 +15,108 @@ theme:
 
 # Promises and async/await in JavaScript (ES2015+)
 
-In this lecture, you'll learn how JavaScript handles asynchronous operations using Promises and the async/await syntax introduced in ES2017.
+In this lecture, you'll learn how JavaScript handles asynchronous operations using **Promises** and the **async/await** syntax introduced in ES2017.
+
+You will also learn how to write cleaner, more maintainable asynchronous code.
 
 <!-- end_slide -->
 
 ## Why Asynchronous Programming?
 
 - JavaScript is **single-threaded**.
-- Blocking operations (e.g., network requests, file access) freeze the UI or delay execution.
-- We use async constructs to handle long-running operations **non-blockingly**.
+- Long-running operations can block execution.
+- Examples include:
+  - Network requests
+  - Reading files
+  - Timers
+  - Database queries
+- Asynchronous programming allows JavaScript to continue executing other tasks while waiting for these operations to complete.
 
-### Real-world example:
-```js
-const data = fetch('https://api.example.com');
-console.log('This runs immediately!');
-```
+<!-- end_slide -->
+
+## Asynchronous Programming
+
+### Example
+
 ```js
 const data = fetch('https://jsonplaceholder.typicode.com/posts');
+
 console.log('This runs immediately!');
 ```
 
-fetch() returns a Promise immediately.
+### What happens?
 
-The browser continues execution without waiting.
+* `fetch()` starts the HTTP request
+* It immediately returns a **Promise**
+* JavaScript continues running the next line
+* The response becomes available later
 
-Only when you await or .then() the result do you get the response later.
+✅ Non-blocking execution improves performance and responsiveness.
 
 <!-- end_slide -->
 
 ## What is a Promise?
 
-A **Promise** represents the eventual result (or error) of an asynchronous operation.
+A **Promise** is an object that represents the eventual completion or failure of an asynchronous operation.
 
-It can be in one of three states:
-- 🕒 *Pending*
-- ✅ *Fulfilled*
-- ❌ *Rejected*
+A Promise has three possible states:
+
+* 🕒 **Pending** → operation still running
+* ✅ **Fulfilled** → operation completed successfully
+* ❌ **Rejected** → operation failed
+
+Promises allow asynchronous code to be handled in a structured and predictable way.
 
 <!-- end_slide -->
 
 ## Creating and Using Promises
 
 ```js
-const fetchData = new Promise((resolve, reject) => {
-  setTimeout(() => {
-    resolve("Data received!");
-  }, 1000);
-});
-
-fetchData.then((result) => {
-  console.log(result);
-}).catch((err) => {
-  console.error(err);
-});
+function fetchData() {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            const rnd = Math.random();
+            if (rnd < .5) resolve("Data received!")
+            else reject("Failed to fetch data");
+        }, 2000);
+    })
+}
+fetchData().then(data => console.log(data))
+           .catch(err => console.error(err));
 ```
 
-✅ Use `.then()` for success  
-❌ Use `.catch()` for failure
+### Important Methods
+
+* `.then()` handles successful results
+* `.catch()` handles errors or rejections
+* `.finally()` runs regardless of success or failure
 
 <!-- end_slide -->
 
 ## Chaining Promises
 
+Promises can be chained together for sequential asynchronous operations.
+
 ```js
-fetch('https://api.example.com')
-  .then(res => res.json())
+fetch('https://jsonplaceholder.typicode.com/posts')
+  .then(response => response.json())
   .then(data => console.log(data))
-  .catch(err => console.error(err));
+  .catch(error => console.error(error));
 ```
 
-- Each `.then()` returns a new Promise
-- Enables powerful sequential logic
-- Errors propagate through `.catch()`
+### Key Idea
+
+* First `.then()` returns a new Promise
+* Values can be passed to the next step
+* Errors automatically propagate to `.catch()`
+
+✅ This avoids deeply nested callbacks.
 
 <!-- end_slide -->
 
-## Common Mistake: Callback Hell
+## Common Problem: Callback Hell
+
+Before Promises, asynchronous code often became deeply nested.
 
 ```js
 setTimeout(() => {
@@ -104,161 +130,241 @@ setTimeout(() => {
 }, 1000);
 ```
 
-😵 This is **hard to read and debug**.
+😵 Problems with callback hell:
 
+* Difficult to read
+* Hard to debug
+* Poor maintainability
+* Complex error handling
 
 <!-- end_slide -->
-## Common Mistake: Callback Hell
 
-✅ Promises to solve this.
+## Solving Callback Hell with Promises
 
 ```js
 function delay(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
+  return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 delay(1000)
-    .then(() => {
-        console.log('Step 1');
-        return delay(1000);
-    })
-    .then(() => {
-        console.log('Step 2');
-        return delay(1000);
-    })
-    .then(() => {
-        console.log('Step 3');
-    });
+  .then(() => {
+    console.log('Step 1');
+    return delay(1000);
+  })
+  .then(() => {
+    console.log('Step 2');
+    return delay(1000);
+  })
+  .then(() => {
+    console.log('Step 3');
+  });
 ```
 
-<!-- end_slide -->
-## Common Mistake: Callback Hell
+✅ Promises create cleaner sequential flows.
 
-✅ Promises and async/await solve this.
+<!-- end_slide -->
+
+## Solving Callback Hell with async/await
 
 ```js
-// Helper function to delay execution
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 async function runSteps() {
-await delay(1000);
-console.log('Step 1');
+  await delay(1000);
+  console.log('Step 1');
 
-await delay(1000);
-console.log('Step 2');
+  await delay(1000);
+  console.log('Step 2');
 
-await delay(1000);
-console.log('Step 3');
+  await delay(1000);
+  console.log('Step 3');
 }
-
 runSteps();
 ```
 
+### Advantages
+
+* Easier to read
+* Looks like synchronous code
+* Cleaner logic and structure
+
+🚀 `async/await` is now the preferred style in modern JavaScript.
+
 <!-- end_slide -->
+
 ## What is async/await?
 
-- Introduced in ES2017 (ES8)
-- Syntactic sugar over Promises
-- Makes async code look like sync code
+<!-- incremental_lists: true -->
+
+`async/await` was introduced in **ES2017 (ES8)**.
+
+It is built on top of Promises and provides cleaner syntax for asynchronous code.
 
 ```js
-async function myFunc() {
-  const res = await fetch('https://api.example.com');
-  const data = await res.json();
+async function loadPosts() {
+  const response = await fetch('https://jsonplaceholder.typicode.com/posts');
+  const data = await response.json();
   console.log(data);
 }
 ```
 
-🚀 Clean, readable, maintainable
+### Benefits
+
+* Improved readability
+* Easier debugging
+* Better error handling
+* Cleaner sequential logic
 
 <!-- end_slide -->
 
-## async Keyword
+## The async Keyword
 
-- Declares a function that always returns a Promise
-- Can use `await` inside it
+The `async` keyword:
+
+* Declares an asynchronous function
+* Automatically returns a Promise
+* Allows the use of `await` inside the function
 
 ```js
 async function getUser() {
   return 'John Doe';
 }
 
-getUser().then(name => console.log(name)); // 'John Doe'
+getUser().then(name => {
+  console.log(name);
+});  // Output: John Doe
 ```
+
+✅ Even regular return values become resolved Promises.
 
 <!-- end_slide -->
 
-## await Keyword
+## The await Keyword
 
-- Pauses execution **until a Promise settles**
-- Only valid inside `async` functions
+<!-- incremental_lists: true -->
+
+The `await` keyword:
+
+* Pauses execution inside an async function
+* Waits until a Promise settles
+* Returns the resolved value
 
 ```js
 async function fetchData() {
-  const res = await fetch('https://api.example.com');
-  const data = await res.json();
+  const response = await fetch('https://jsonplaceholder.typicode.com/posts');
+  const data = await response.json();
   console.log(data);
 }
 ```
 
-⚠️ `await` does **not block the main thread**, only the function scope
+⚠️ Important:
+
+* `await` only works inside `async` functions
+* It does NOT block the JavaScript event loop
+* Only the current async function pauses
 
 <!-- end_slide -->
 
 ## Error Handling with async/await
 
+Use `try/catch` blocks to handle asynchronous errors.
+
 ```js
 async function loadData() {
   try {
-    const res = await fetch('https://api.example.com/404');
-    const data = await res.json();
+    const response = await fetch('https://jsonplaceholder.typicode.com/invalid-url');
+    const data = await response.json();
     console.log(data);
-  } catch (error) {
-    console.error('Error:', error);
-  }
+  } catch (error) { console.error('Error:', error)}
 }
 ```
 
-🧯 Always wrap `await` in `try/catch` to catch rejections
+✅ `try/catch` makes async error handling cleaner and easier to understand.
 
 <!-- end_slide -->
 
 ## Parallel Execution with Promise.all()
 
+<!-- incremental_lists: true -->
+
+Sometimes multiple asynchronous tasks can run simultaneously.
+
 ```js
 async function loadParallel() {
-  const [a, b] = await Promise.all([
-    fetch('/api/a').then(r => r.json()),
-    fetch('/api/b').then(r => r.json())
+  const [posts, users] = await Promise.all([
+    fetch('https://jsonplaceholder.typicode.com/posts')
+      .then(r => r.json()),
+
+    fetch('https://jsonplaceholder.typicode.com/users')
+      .then(r => r.json())
   ]);
-  console.log(a, b);
+  console.log(posts);
+  console.log(users);
 }
 ```
 
-- Runs both fetches **concurrently**
-- More efficient than waiting sequentially
+### Benefits
+
+* Executes tasks concurrently
+* Faster than sequential execution
+* Improves application performance
+
+<!-- end_slide -->
+
+## Sequential vs Parallel Execution
+
+### Sequential Execution
+
+```js
+const a = await fetch('/api/a');
+const b = await fetch('/api/b');
+```
+
+⏳ Total waiting time = A + B
+
+### Parallel Execution
+
+```js
+const [a, b] = await Promise.all([
+  fetch('/api/a'),
+  fetch('/api/b')
+]);
+```
+
+⚡ Both requests execute at the same time.
 
 <!-- end_slide -->
 
 ## When to Use Promises vs async/await
 
-| Situation                | Use                |
-|--------------------------|--------------------|
-| Simple chaining          | `.then().catch()`  |
-| Sequential logic         | `async/await`      |
-| Multiple tasks at once   | `Promise.all()`    |
-| Clean error handling     | `try/catch`        |
-| Complex conditional flow | `async/await`      |
+| Situation            | Recommended Approach |
+| -------------------- | -------------------- |
+| Simple chaining      | `.then().catch()`    |
+| Sequential logic     | `async/await`        |
+| Complex workflows    | `async/await`        |
+| Parallel execution   | `Promise.all()`      |
+| Clean error handling | `try/catch`          |
 
-Use **async/await** for clarity, especially in complex flows.
+### General Recommendation
+
+✅ Prefer `async/await` for readability and maintainability.
 
 <!-- end_slide -->
 
 ## Summary
 
-- Promises are objects representing future values.
-- `async` declares a function that returns a Promise.
-- `await` pauses execution until a Promise settles.
-- Use `try/catch` for error handling.
-- Use `Promise.all()` to run tasks in parallel.
+* JavaScript uses asynchronous programming to avoid blocking execution.
+* A Promise represents a future value or error.
+* Promises can be:
+
+  * Pending
+  * Fulfilled
+  * Rejected
+* `async` functions always return Promises.
+* `await` pauses execution until a Promise settles.
+* `try/catch` handles asynchronous errors cleanly.
+* `Promise.all()` runs tasks in parallel for better performance.
+
+🚀 Modern JavaScript applications heavily rely on Promises and async/await.
+
 

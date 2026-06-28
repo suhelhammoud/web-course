@@ -164,6 +164,139 @@ Common `req` properties:
 
 <!-- end_slide -->
 
+# Retrieve the GET query string paramenter
+
+Express populate the `Request.query` object for us.
+
+<!-- column_layout: [2, 3] -->
+<!-- column: 0 -->
+- Example: 
+<!-- column: 1 -->
+```Javascript
+?name=flavio&age=35
+```
+<!-- reset_layout -->
+
+<!-- column_layout: [2, 3] -->
+<!-- column: 0 -->
+- Access single query string parameter: 
+<!-- column: 1 -->
+```JavaScript
+req.query.name //flavio
+req.query.age //35
+```
+<!-- reset_layout -->
+
+<!-- column_layout: [2, 3] -->
+<!-- column: 0 -->
+- Iterate using for in loop:
+<!-- column: 1 -->
+```Javascript
+for (const key in req.query) {
+console.log(key, req.query[key])
+}
+```
+<!-- reset_layout -->
+
+<!-- end_slide -->
+
+# retrieve POST query string parameters
+
+
+## What are POST Query Parameters?
+
+- Sent by HTTP clients (forms, POST requests)
+- Not visible in URL (unlike GET)
+- Can be sent in different formats:
+  - JSON
+  - URL-encoded (form data)
+  - Multipart (file uploads)
+
+<!-- end_slide -->
+
+## Accessing POST Data: Request.body
+
+Express provides access to POST data through `req.body`:
+
+```javascript
+app.post('/form', (req, res) => {
+    const name = req.body.name
+    const email = req.body.email
+})
+```
+
+**But first** - you need middleware to parse the data!
+
+
+<!-- end_slide -->
+
+## Middleware 1: JSON Data
+
+For requests with `Content-Type: application/json`
+
+```javascript
+const express = require('express')
+const app = express()
+
+// Add JSON parsing middleware
+app.use(express.json())
+
+// Now you can access JSON data
+app.post('/api/data', (req, res) => {
+    console.log(req.body)  // Parsed JSON object
+    res.json({ received: req.body })
+})
+```
+
+**Typical use**: REST APIs, mobile apps, fetch/XHR requests
+
+<!-- end_slide -->
+## Middleware 2: URL-Encoded Data (Forms)
+
+For requests with `Content-Type: application/x-www-form-urlencoded`
+
+```javascript
+const express = require('express')
+const app = express()
+
+// Add URL-encoded parsing middleware
+app.use(express.urlencoded({ extended: true }))
+
+// Now you can access form data
+app.post('/form', (req, res) => {
+    console.log(req.body)  // Parsed form data
+    res.send(`Hello ${req.body.name}`)
+})
+```
+
+**Typical use**: Traditional HTML forms
+
+<!-- end_slide -->
+
+
+## Important Notes
+
+### ✅ Modern Express (v4.16+)
+No external modules needed!
+
+```javascript
+// Built-in parsers work perfectly
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
+```
+
+### ❌ Older Express (< v4.16)
+Required `body-parser` module:
+
+```javascript
+// No longer needed for modern Express
+const bodyParser = require('body-parser')
+app.use(bodyParser.json())
+```
+
+
+<!-- end_slide -->
+
 # Sending a Response
 
 ```js
@@ -503,3 +636,68 @@ app.post('/form', [
 
 <!-- end_slide -->
 
+## Test endpoints
+
+```bash
+curl -X POST http://localhost:3000/form \ 
+  -H "Content-Type: application/json" \ 
+  -d '{"name": "jo", "email": "notanemail", "age": "notanumber"}'
+```
+
+<!-- end_slide -->
+
+
+## Test endpoints
+
+```bash
+curl -X POST http://localhost:3000/form \ 
+  -H "Content-Type: application/json" \ 
+  -d '{"name": "<script>alert(1)</script>", "email": "notanemail", "age": "notanumber"}'
+```
+<!-- end_slide -->
+
+
+## Sanitize Input
+
+Install sanitizer:
+
+```bash
+npm install express-sanitizer
+```
+
+Use in route:
+
+```js
+const sanitize = require('express-sanitizer')
+
+app.post('/form', [
+  sanitize('name').escape(),
+  sanitize('email').trim().escape(),
+  sanitize('age').toInt()
+], (req, res) => {
+  const errors = validationResult(req)
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ errors: errors.array() })
+  }
+})
+```
+
+<!-- end_slide -->
+
+## Handling Forms
+
+(not covered)
+
+
+<!-- end_slide -->
+
+## File Uploads in Express
+
+(not covered)
+
+<!-- end_slide -->
+
+
+## Reference
+
+* [Express](https://expressjs.com/)
